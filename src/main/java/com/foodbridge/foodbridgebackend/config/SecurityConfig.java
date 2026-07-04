@@ -34,7 +34,7 @@ public class SecurityConfig {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(List.of(
             "http://localhost:5173",
-            "https://foodbridge-frontend.vercel.app"
+            "https://foodbridge-frontend-lilac.vercel.app"
         ));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*"));
