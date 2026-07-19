@@ -3,6 +3,7 @@ package com.foodbridge.foodbridgebackend.auth;
 import com.foodbridge.foodbridgebackend.auth.dto.LoginRequest;
 import com.foodbridge.foodbridgebackend.auth.dto.RegisterDonorRequest;
 import com.foodbridge.foodbridgebackend.auth.dto.RegisterNgoRequest;
+import com.foodbridge.foodbridgebackend.notification.EmailService;
 import com.foodbridge.foodbridgebackend.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,10 +26,10 @@ public class AuthService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-     
+
     @Autowired
-    private com.foodbridge.foodbridgebackend.notification.EmailService emailService;
-    
+    private EmailService emailService;
+
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -59,7 +60,7 @@ public class AuthService {
             savedUser.getEmail(),
             "Welcome to Food Bridge!",
             "Hi " + savedUser.getName() + ",\n\n"
-            + "Your donor account for " + request.getBusinessName() + " has been created successfully. "
+            + "Your donor account has been created successfully. "
             + "You can now log in and start posting surplus food.\n\n"
             + "Thank you for joining Food Bridge.\n\nFood Bridge Team"
         );
@@ -95,8 +96,21 @@ public class AuthService {
             "Food Bridge - Application received",
             "Hi " + savedUser.getName() + ",\n\n"
             + "Thank you for registering " + request.getNgoName() + " on Food Bridge.\n\n"
-            + "Your application is currently under review by our admin team. "
-            + "You'll receive another email once your account is approved, after which you can log in and start accepting food.\n\n"
+            + "Your application is under review. You'll receive another email once approved.\n\n"
+            + "Food Bridge Team"
+        );
+
+        emailService.sendEmail(
+            "foodbridge.noreplay@gmail.com",
+            "Food Bridge - New NGO registration pending approval",
+            "Hi Admin,\n\n"
+            + "A new NGO has registered and is waiting for your approval:\n\n"
+            + "NGO Name: " + request.getNgoName() + "\n"
+            + "Contact Person: " + request.getName() + "\n"
+            + "Email: " + request.getEmail() + "\n"
+            + "Registration Number: " + request.getRegistrationNumber() + "\n\n"
+            + "Approve or reject here:\n"
+            + "https://foodbridge-frontend-lilac.vercel.app/admin\n\n"
             + "Food Bridge Team"
         );
 
